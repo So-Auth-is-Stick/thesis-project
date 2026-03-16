@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -15,27 +14,22 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    // Fixed the jvmTarget deprecation warning
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = "17"
     }
 
     defaultConfig {
         applicationId = "com.example.thesis_project"
-        // MANUALLY SET THESE to ensure ML Kit compatibility
+        // Manually set for ML Kit compatibility
         minSdk = 21 
-        targetSdk = 34 
-        
+        targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
-    dependencies {
-    // This forces the Pose Detection model to be bundled inside your APK
-    implementation 'com.google.mlkit:pose-detection:18.0.0'
-    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -43,4 +37,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// Fixed the syntax for Kotlin DSL (double quotes and parentheses)
+dependencies {
+    implementation("com.google_mlkit:pose-detection:18.0.0")
 }
