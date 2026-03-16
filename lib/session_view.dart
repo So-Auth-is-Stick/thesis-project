@@ -19,7 +19,9 @@ class _SessionViewState extends State<SessionView> {
   late PoseExtractor _extractor;
   Pose? _currentPose;
   Size? _imageSize;
-  FormState _formState = FormState.neutral; // Defaults to gray lines
+  
+  // CORRECTED: Using PoseFormState
+  PoseFormState _formState = PoseFormState.neutral; // Defaults to gray lines
   
   int _repCount = 0; 
   // This list will store your session data to send to the Python server
@@ -49,7 +51,8 @@ class _SessionViewState extends State<SessionView> {
   }
 
   // --- THE TACTICAL MATH (Real-time checks) ---
-  FormState _analyzeForm(Pose pose) {
+  // CORRECTED: Return type is now PoseFormState
+  PoseFormState _analyzeForm(Pose pose) {
     final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee];
     final rightKnee = pose.landmarks[PoseLandmarkType.rightKnee];
     final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
@@ -69,13 +72,13 @@ class _SessionViewState extends State<SessionView> {
       if (kneeDistance < (ankleDistance * 0.7)) {
         // Record the fault for the server
         _logFrameData(pose, "knee_valgus");
-        return FormState.bad; // Skeleton turns Red
+        return PoseFormState.bad; // Skeleton turns Red
       } else {
-        return FormState.good; // Skeleton turns Green
+        return PoseFormState.good; // Skeleton turns Green
       }
     }
     
-    return FormState.neutral; // Skeleton stays Gray if not enough data
+    return PoseFormState.neutral; // Skeleton stays Gray if not enough data
   }
 
   // --- THE LOGGER ---

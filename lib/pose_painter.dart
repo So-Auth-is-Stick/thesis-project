@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 // The three states your math logic will trigger
-enum FormState { neutral, good, bad }
+enum PoseFormState { neutral, good, bad }
 
 class PosePainter extends CustomPainter {
   final Pose pose;
   final Size absoluteImageSize;
-  final FormState formState;
+  final PoseFormState formState;
   final bool isFrontCamera; // Crucial for mirroring the skeleton
 
   PosePainter(this.pose, this.absoluteImageSize, this.formState, {this.isFrontCamera = true});
@@ -16,8 +16,10 @@ class PosePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // 1. Dynamic Edge Color
     Color edgeColor = Colors.grey; // Default
-    if (formState == FormState.good) edgeColor = Colors.greenAccent;
-    if (formState == FormState.bad) edgeColor = Colors.redAccent;
+    
+    // CORRECTED: Using PoseFormState here instead of FormState
+    if (formState == PoseFormState.good) edgeColor = Colors.greenAccent;
+    if (formState == PoseFormState.bad) edgeColor = Colors.redAccent;
 
     final Paint edgePaint = Paint()
       ..style = PaintingStyle.stroke
