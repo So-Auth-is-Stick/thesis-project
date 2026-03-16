@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+<<<<<<< HEAD
+<uses-permission android:name="android.permission.CAMERA" />
+=======
+    <uses-permission android:name="android.permission.CAMERA" />
+>>>>>>> df010d2a3222e364b8dd90b476a992c07ae8e348
     <application
         android:label="thesis_project"
         android:name="${applicationName}"

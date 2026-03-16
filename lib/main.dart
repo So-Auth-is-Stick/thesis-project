@@ -3,13 +3,11 @@ import 'package:camera/camera.dart';
 import 'session_view.dart'; 
 
 Future<void> main() async {
-  // Lock the initialization so we can access hardware before the UI paints
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Fetch the list of physical cameras on the device
+  // Initialize cameras before the app starts
   final cameras = await availableCameras();
   
-  // Ignite the app and pass the hardware data down
   runApp(ThesisApp(cameras: cameras));
 }
 
@@ -21,10 +19,9 @@ class ThesisApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pose Tracker',
+      title: 'TSU Thesis - Pose Tracker',
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      // Bypass the counter app and load your 3D skeleton view immediately
       home: SessionView(cameras: cameras), 
     );
   }
