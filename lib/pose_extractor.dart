@@ -20,18 +20,29 @@ class PoseExtractor {
   PoseExtractor({required this.onPoseDetected}); 
 
   Future<void> startCameraStream(List<CameraDescription> cameras) async {
-    final frontCamera = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front);
-    
-    cameraController = CameraController(frontCamera, ResolutionPreset.low);
-    await cameraController!.initialize();
-
-    cameraController!.startImageStream((CameraImage image) {
-      if (_isProcessing) return;
-      _isProcessing = true;
-      
-      _processImage(image, frontCamera);
-    });
+  if (cameras.isEmpty) {
+    print("NO CAMERAS FOUND");
+    return;
   }
+
+  cameraController = CameraController(
+    cameras[0],
+    ResolutionPreset.medium, // Lower this to 'low' for testing if it hangs
+    enableAudio: false,
+  );
+
+  try {
+    print("DEBUG: Initializing camera...");
+    await cameraController!.initialize().timeout(const Duration(seconds: 5));
+    print("DEBUG: Camera initialized successfully.");
+    
+    cameraController!.startImageStream((CameraImage image) {
+      // Logic for pose detection...
+    });
+  } catch (e) {
+    print("CAMERA ERROR: $e");
+  }
+}
 
   Future<void> _processImage(CameraImage image, CameraDescription camera) async {
     try {

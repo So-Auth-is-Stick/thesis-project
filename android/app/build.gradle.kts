@@ -20,16 +20,18 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.thesis_project"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // MANUALLY SET THESE to ensure ML Kit compatibility
+        minSdk = 21 
+        targetSdk = 34 
+        
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
-
+    dependencies {
+    // This forces the Pose Detection model to be bundled inside your APK
+    implementation 'com.google.mlkit:pose-detection:18.0.0'
+    }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
