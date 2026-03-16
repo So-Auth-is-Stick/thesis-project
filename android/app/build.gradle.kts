@@ -41,5 +41,5 @@ flutter {
 
 // Fixed the syntax for Kotlin DSL (double quotes and parentheses)
 dependencies {
-    implementation("com.google_mlkit:pose-detection:18.0.0")
+    implementation("com.google.mlkit:pose-detection:18.0.0")
 }
