@@ -14,14 +14,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // Fixed the jvmTarget deprecation warning
     kotlinOptions {
         jvmTarget = "17"
     }
 
     defaultConfig {
         applicationId = "com.example.thesis_project"
-        // Manually set for ML Kit compatibility
         minSdk = 21 
         targetSdk = 34
         versionCode = flutter.versionCode
@@ -39,7 +37,7 @@ flutter {
     source = "../.."
 }
 
-// Fixed the syntax for Kotlin DSL (double quotes and parentheses)
 dependencies {
-    implementation("com.google.mlkit:pose-detection:18.0.0")
+    // This bundles the AI model into the app to prevent the black screen hang
+    implementation("com.google.mlkit:pose-detection:18.0.0-beta5")
 }
