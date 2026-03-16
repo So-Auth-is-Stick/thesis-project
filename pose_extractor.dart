@@ -3,6 +3,7 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart'; // This one is required for DeviceOrientation
+
 class PoseExtractor {
   
   CameraController? cameraController;
@@ -11,6 +12,12 @@ class PoseExtractor {
   final PoseDetector _poseDetector = PoseDetector(options: PoseDetectorOptions());
   
   bool _isProcessing = false;
+
+  // ADD THIS: The bridge to the UI
+  final Function(Pose, Size) onPoseDetected; 
+
+  // Require it in the constructor
+  PoseExtractor({required this.onPoseDetected}); 
 
   Future<void> startCameraStream(List<CameraDescription> cameras) async {
     final frontCamera = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front);
@@ -35,9 +42,16 @@ class PoseExtractor {
       // 2. The Extraction
       final List<Pose> poses = await _poseDetector.processImage(inputImage);
 
-      // 3. The Math Prep
-      for (Pose pose in poses) {
-        _parseCoordinates(pose);
+      // 3. The Math Prep & UI Handoff
+      if (poses.isNotEmpty) {
+        // We need the exact dimensions of the frame to scale the skeleton correctly
+        final imageSize = Size(image.width.toDouble(), image.height.toDouble());
+        
+        // Send the data up to the UI (SessionView) to draw the glowing skeleton
+        onPoseDetected(poses.first, imageSize);
+        
+        // Keep your background logging/math running
+        _parseCoordinates(poses.first);
       }
     } catch (e) {
       print("Extraction failed: $e");
@@ -126,4 +140,9 @@ class PoseExtractor {
     DeviceOrientation.portraitDown: 180,
     DeviceOrientation.landscapeRight: 270,
   };
+  
+  void dispose() {
+    _poseDetector.close();
+    cameraController?.dispose();
+  }
 }
